@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Playground</title>
+
+    <link id="bootstrap-stylesheet" rel="stylesheet" href="/styles/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">Bootstrap Playground</h1>
+            <p class="lead">A place to test custom bootstrap themes.</p>
+        </div>
+    </div> <!-- JUMBOTRON -->
+    <div class="row">
+        <div class="col-12 col-sm-4 col-md-3 col-lg-2 mt-2 mb-2">
+            <div class="card w-100">
+                <div class="card-header">
+                    <strong>Navigation</strong>
+                </div>
+                <div class="card-body">
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="#themes">Themes</a>
+                        <a class="nav-link" href="#alerts">Alerts</a>
+                        <a class="nav-link" href="#buttons">Buttons</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-8 mt-2">
+            <div id="themes" class="card mb-4">
+                <div class="card-header">
+                    <h3>Themes</h3>
+                </div>
+                <div class="card-body">
+                    <ul id="theme-color-list" class="list-group">
+                        <!-- Themes go here -->
+                    </ul>
+                    <small class="text-muted">*Double click to remove</small>
+                </div>
+
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="new-theme-input" placeholder="Theme Name" pattern="-?[_a-zA-Z]+[_a-zA-Z0-9-]*">
+                        <div class="input-group-append">
+                            <button id="btn-add-theme" class="btn btn-secondary" type="button">+ Add Theme</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- THEMES -->
+
+
+
+            <div id="alerts" class="card mt-4 mb-4">
+                <div class="card-header">
+                    <h3>Alerts</h3>
+                </div>
+                <div class="card-body">
+                    <div id="alert-test">
+
+                    </div>
+                </div>
+            </div> <!-- ALERTS -->
+
+            <div id="buttons" class="card mt-4 mb-4">
+                <div class="card-header">
+                    <h3>Buttons</h3>
+                </div>
+                <div class="card-body">
+                    <div id="button-test">
+
+                    </div>
+                </div>
+            </div> <!-- Buttons -->
+        </div>
+    </div>
+
+
+
+
+
+</div>
+<script>
+    var colorScheme = {
+        themes: [
+            {
+                name:  'primary',
+                color: '#007bff'
+            },
+            {
+                name:  'secondary',
+                color: '#6c757d'
+            },
+            {
+                name:  'success',
+                color: '#28a745'
+            },
+            {
+                name:  'danger',
+                color:  '#dc3545'
+            },
+            {
+                name:  'warning',
+                color: '#ffc107'
+            },
+            {
+                name:  'info',
+                color: '#17a2b8'
+            },
+            {
+                name:  'light',
+                color: '#f8f9fa'
+            },
+            {
+                name:  'dark',
+                color: '#343a40'
+            }
+        ],
+        addTheme: (themeName) => {
+            if(colorScheme.themes.includes(themeName)) return false;
+
+            colorScheme.themes.push(
+                {
+                    name:  themeName,
+                    color: getClassBG('.bg-' + themeName)
+                }
+            );
+
+            return true;
+
+        },
+        removeTheme: (themeName) => {
+            for(let i = 0; i < colorScheme.themes.length; i++) {
+                if(colorScheme.themes[i].name === themeName) {
+                    colorScheme.themes.splice(i, 1);
+                    return true;
+                }
+            }
+            return false;
+        },
+        components: [
+            {
+                name: 'listItem',
+                parent: 'theme-color-list',
+                htmlTemplate: (theme) => `<li class="list-group-item text-center bg-${ theme.name } theme-item" data-theme="${ theme.name }"><strong>${ theme.name } -- ${ theme.color }</strong></li>`
+            },
+            {
+                name: 'alertBox',
+                parent: 'alert-test',
+                htmlTemplate: (theme) => `<div class="alert alert-${ theme.name }" role="alert">A simple ${ theme.name } alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.</div>`
+            },
+            {
+                name: 'buttons',
+                parent: 'button-test',
+                htmlTemplate: (theme) =>
+                    `<div class="button-group mt-2 mb-2" data-theme="${ theme.name }">
+                        <h4 class="text-${ theme.name }">${ theme.name }</h4>
+                        <button type="button" class="btn btn-${ theme.name }">Normal</button>
+                        <button type="button" class="btn btn-${ theme.name } btn-sm">Small</button>
+                        <button type="button" class="btn btn-${ theme.name } btn-lg">Large</button>
+                        <button type="button" class="btn btn-${ theme.name } btn-block mt-2">Block</button>
+                        <hr>
+                    </div>`
+            }
+        ],
+        renderComponent: (htmlTemplate, node) => {
+            node.innerHTML += htmlTemplate;
+        },
+        updateAll: () => {
+            for(let i = 0; i < colorScheme.components.length; i++) {
+                let componentParent = document.getElementById(colorScheme.components[i].parent);
+
+                // REMOVE OLD CONTENTS.
+                componentParent.innerHTML = '';
+
+                for(let j = 0; j < colorScheme.themes.length; j++) {
+                    colorScheme.renderComponent(colorScheme.components[i].htmlTemplate(colorScheme.themes[j]), componentParent);
+                }
+            }
+            $('.theme-item').dblclick((e) => btnRemoveTheme(e));
+        },
+        updateColors: () => {
+
+        }
+
+    };
+
+    $(document).ready(() => {
+        colorScheme.updateAll();
+
+        $('#btn-add-theme').click((e) => {
+            let newTheme = document.getElementById('new-theme-input').value;
+            if(!newTheme.match(/-?[_a-zA-Z]+[_a-zA-Z0-9-]*/)) {
+                alert('Invalid Class!');
+                return;
+            }
+            let themeAdded = colorScheme.addTheme(newTheme);
+            if(themeAdded) {
+                colorScheme.updateAll();
+                document.getElementById('new-theme-input').value = '';
+            } else alert('Theme already exists!');
+
+        });
+    });
+
+    function getClassBG(className) {
+        if(!className.match(/-?[_a-zA-Z]+[_a-zA-Z0-9-]*/)) return 'undefined';
+        let classes = document.styleSheets[0].rules || document.styleSheets[0].cssRules;
+        for (var x = 0; x < classes.length; x++) {
+            if (classes[x].selectorText == className) {
+                return classes[x].style.backgroundColor;
+            }
+        }
+
+        return 'undefined';
+    }
+
+    function btnRemoveTheme(event) {
+        let themeToRemove = event.delegateTarget.dataset.theme;
+        colorScheme.removeTheme(themeToRemove);
+        colorScheme.updateAll();
+    }
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
