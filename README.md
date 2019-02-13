@@ -6,3 +6,6 @@ A place to test your custom bootstrap scss.
  3. Use the command "sass src/scss/bootstrap.scss public/styles/bootstrap.css"
  4. For automatic compiling, use "node build-css"
  5. View changes by opening public/index.html
+
+More info at:
+ https://docs.google.com/presentation/d/1xMLvDdAroGrJMaw-1VsC9Asaod6fSiCCHsOWMfE3mRk/edit?usp=sharing
